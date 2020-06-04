@@ -4,16 +4,18 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 
-// import iView from 'iview'
-// import locale from 'iview/dist/locale/en-US'
-// import 'iview/dist/styles/iview.css'
+// import store from './store/store.js';
+
+import iView from 'iview'
+import locale from 'iview/dist/locale/en-US'
+import 'iview/dist/styles/iview.css'
 
 Vue.config.productionTip = false
 
-// Vue.use(iView, {locale})
+Vue.use(iView, {locale})
 
-// var VueCodeMirror = require('vue-codemirror-lite')
-// Vue.use(VueCodeMirror)
+var VueCodeMirror = require('vue-codemirror-lite')
+Vue.use(VueCodeMirror)
 
 /* eslint-disable no-new */
 new Vue({

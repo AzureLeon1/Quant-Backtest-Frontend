@@ -9,16 +9,17 @@
       @changeLang="onChangeLang">
     </CodeMirror> -->
     test
+    <CodeMirror></CodeMirror>
   </div>
 </template>
 
 <script>
-  // import CodeMirror from '@/components/CodeMirror.vue'
+  import CodeMirror from '@/components/CodeMirror.vue'
 
 export default {
   name: 'Code',
-  // components: {
-  //   CodeMirror
-  // }
+  components: {
+    CodeMirror
+  }
 }
 </script>
