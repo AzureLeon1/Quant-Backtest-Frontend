@@ -15,7 +15,7 @@ import 'element-ui/lib/theme-chalk/index.css';
 
 import axios from 'axios';
 Vue.prototype.$axios = axios;
-axios.defaults.baseURL = 'http://localhost:44352';
+axios.defaults.baseURL = 'http://localhost:44370';
 
 Vue.config.productionTip = false
 

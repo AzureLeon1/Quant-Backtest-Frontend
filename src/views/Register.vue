@@ -14,6 +14,7 @@
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="submitForm('form')">注 册</el-button>
+                    <el-button type="primary" @click="back()">返回登录</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -60,6 +61,9 @@ export default {
     },
 
     methods: {
+        back() {
+            this.$router.push({name: 'Login'})
+        },
         submitForm(formName) {
             var params = {
                 "User": this.form.userName,

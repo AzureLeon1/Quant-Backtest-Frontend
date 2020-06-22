@@ -39,15 +39,20 @@ export default {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     var params = {
-                        "username": this.form.userName,
+                        "user": this.form.userName,
                         "password": this.form.password,
-                        "grant_type": "password"
                     }
-                    this.$axios.post('./api/token', this.param(params)).then((response) => {
+                    this.$axios.post('./api/Login', this.param(params)).then((response) => {
                         var res = response.data
-                        sessionStorage.setItem('accessToken', res.access_token)
-                        sessionStorage.setItem('refresh_token', res.refresh_token)
-                        this.$router.push({name: 'Standard'})
+                        console.log(response);
+                        if (res=="success") {
+                            sessionStorage.setItem('user', this.form.userName)
+                            //this.$router.push({name: 'Standard'})
+                        }
+                        else {
+                            this.$message.error("密码或用户名错误，请重试")
+                        }
+                        
                     }).catch((error) => {
                         this.$message.error("密码或用户名错误，请重试")
                     })
