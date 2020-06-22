@@ -66,8 +66,8 @@ export default {
         },
         submitForm(formName) {
             var params = {
-                "User": this.form.userName,
-                "Password": this.form.password
+                "user": this.form.userName,
+                "password": this.form.password
             }
             this.$refs[formName].validate((valid) => {
                 if (valid) {

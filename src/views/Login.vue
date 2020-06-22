@@ -42,7 +42,7 @@ export default {
                         "user": this.form.userName,
                         "password": this.form.password,
                     }
-                    this.$axios.post('./api/Login', this.param(params)).then((response) => {
+                    this.$axios.post('./api/Login', params).then((response) => {
                         var res = response.data
                         console.log(response);
                         if (res=="success") {
