@@ -8,8 +8,14 @@
       @changeTheme="onChangeTheme"
       @changeLang="onChangeLang">
     </CodeMirror> -->
-    test
-    <CodeMirror></CodeMirror>
+    我的策略
+    <Row>
+      <Col span="12">
+      <CodeMirror></CodeMirror> 
+      </Col>
+      <Col span="12"> </Col>
+    </Row>
+    
   </div>
 </template>
 

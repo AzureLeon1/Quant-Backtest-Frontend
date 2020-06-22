@@ -9,12 +9,12 @@
           </Option>
         </Select>
 
-        <Tooltip :content="重设返回默认代码设置" placement="top" style="margin-left: 10px">
-          <Button icon="refresh" @click="onResetClick"></Button>
+        <Tooltip content="重设返回默认代码设置" placement="top" style="margin-left: 10px">
+          <Button icon="md-refresh" @click="onResetClick"></Button>
         </Tooltip>
 
-        <Tooltip :content="上传文件" placement="top" style="margin-left: 10px">
-          <Button icon="upload" @click="onUploadFile"></Button>
+        <Tooltip content="上传文件" placement="top" style="margin-left: 10px">
+          <Button icon="md-cloud-upload" @click="onUploadFile"></Button>
         </Tooltip>
 
         <input type="file" id="file-uploader" style="display: none" @change="onUploadFileDone">
@@ -31,7 +31,8 @@
       </div>
       </Col>
     </Row>
-    <codemirror :value="value" :options="options" @change="onEditorCodeChange" ref="myEditor">
+    <codemirror style="text-align: left" :value="value" :options="options" @change="onEditorCodeChange" ref="myEditor">
+
     </codemirror>
   </div>
 </template>
@@ -67,33 +68,38 @@
       codemirror
     },
     props: {
-      value: {
+      /* value: {
         type: String,
-        default: ''
+        default: 's = input().split()\nprint(int(s[0]) + int(s[1]))'
       },
       languages: {
         type: Array,
         default: () => {
-          return ['C', 'C++', 'Java', 'Python2', 'python3']
+         return ['Python3']
         }
       },
       language: {
         type: String,
-        default: 'C++'
+        default: 'Python3'
       },
       theme: {
         type: String,
-        default: 'solarized'
-      }
+        default: 'material'
+      } */
     },
     data () {
       return {
+        value: 's = input().split()\nprint(int(s[0]) + int(s[1]))',
+        languages: ['Python3'],
+        language: 'Python3',
+        theme: 'material',
+        
         options: {
           // codemirror options
           tabSize: 4,
           indentUnit: 4,
-          mode: 'text/x-csrc',
-          theme: 'solarized',
+          mode: 'text/x-python',
+          theme: 'material',
           lineNumbers: true,
           line: true,
           matchBrackets: true,
@@ -107,16 +113,21 @@
           highlightSelectionMatches: {showToken: /\w/, annotateScrollbar: true}
         },
         mode: {
-          'C++': 'text/x-csrc'
+          'Python3': 'text/x-python'
         },
         themes: [
-          {label: 'Monokai'},
-          {label: 'Solarized'},
-          {label: 'Material'}
-        ]
+          {label: 'Monokai', value: 'monokai'},
+          {label: 'Solarized', value: 'solarized'},
+          {label: 'Material', value: 'material'}
+        ],
+        template: {
+          'Python3': 's = input().split()\nprint(int(s[0]) + int(s[1]))'
+        }
       }
     },
     mounted () {
+      this.editor.setOption('mode', this.mode[this.language])
+      this.editor.setOption('theme', 'material')
       // utils.getLanguages().then(languages => {
       //   let mode = {}
       //   languages.forEach(lang => {
@@ -126,23 +137,35 @@
       //   this.editor.setOption('mode', this.mode[this.language])
       // })
 
-      this.editor.setOption('mode', 'text/x-csrc')
+      this.editor.setOption('mode', 'text/x-python')
       this.editor.focus()
     },
     methods: {
       onEditorCodeChange (newCode) {
-        this.$emit('update:value', newCode)
+        this.value = newCode
+        //this.$emit('update:value', newCode)
       },
       onLangChange (newVal) {
         this.editor.setOption('mode', this.mode[newVal])
-        this.$emit('changeLang', newVal)
+        //this.$emit('changeLang', newVal)
       },
       onThemeChange (newTheme) {
         this.editor.setOption('theme', newTheme)
-        this.$emit('changeTheme', newTheme)
+        //this.$emit('changeTheme', newTheme)
       },
       onResetClick () {
-        this.$emit('resetCode')
+       // this.$emit('resetCode')
+       this.$Modal.confirm({
+          content: '确定要重置代码吗？',
+          onOk: () => {
+            if (this.template && this.template[this.language]) {
+              this.value = this.template[this.language]
+            } else {
+              this.value = ''
+            }
+          }
+        })
+       this.value = this.template[this.language]
       },
       onUploadFile () {
         document.getElementById('file-uploader').click()
@@ -191,7 +214,7 @@
     height: auto !important;
   }
   .CodeMirror-scroll {
-    min-height: 300px;
+    min-height: 600px;
     max-height: 1000px;
   }
 </style>
