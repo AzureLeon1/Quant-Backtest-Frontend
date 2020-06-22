@@ -15,6 +15,7 @@ import 'element-ui/lib/theme-chalk/index.css';
 
 import axios from 'axios';
 Vue.prototype.$axios = axios;
+axios.defaults.baseURL = 'http://localhost:44352';
 
 Vue.config.productionTip = false
 
@@ -28,7 +29,7 @@ Vue.use(VueCodeMirror)
 Vue.config.productionTip = false;
 
 //路由守卫
-router.beforeEach((to, from, next) => {
+/* router.beforeEach((to, from, next) => {
   //路由中设置的needLogin字段就在to当中 
   if (window.sessionStorage.accessToken) {
     // console.log(to.path) //每次跳转的路径
@@ -49,7 +50,7 @@ router.beforeEach((to, from, next) => {
       next({ path: '/' });
     }
   }
-})
+}) */
 
 axios.interceptors.request.use(
   config => {
