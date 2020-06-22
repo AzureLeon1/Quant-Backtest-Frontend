@@ -68,6 +68,10 @@
       codemirror
     },
     props: {
+      value: {
+        type: String,
+        defalut: ''
+      }
       /* value: {
         type: String,
         default: 's = input().split()\nprint(int(s[0]) + int(s[1]))'
@@ -89,7 +93,7 @@
     },
     data () {
       return {
-        value: 's = input().split()\nprint(int(s[0]) + int(s[1]))',
+        //value: 's = input().split()\nprint(int(s[0]) + int(s[1]))',
         languages: ['Python3'],
         language: 'Python3',
         theme: 'material',
@@ -142,8 +146,8 @@
     },
     methods: {
       onEditorCodeChange (newCode) {
-        this.value = newCode
-        //this.$emit('update:value', newCode)
+        //this.value = newCode
+        this.$emit('update:value', newCode)
       },
       onLangChange (newVal) {
         this.editor.setOption('mode', this.mode[newVal])
@@ -154,18 +158,7 @@
         //this.$emit('changeTheme', newTheme)
       },
       onResetClick () {
-       // this.$emit('resetCode')
-       this.$Modal.confirm({
-          content: '确定要重置代码吗？',
-          onOk: () => {
-            if (this.template && this.template[this.language]) {
-              this.value = this.template[this.language]
-            } else {
-              this.value = ''
-            }
-          }
-        })
-       this.value = this.template[this.language]
+        this.$emit('resetCode')
       },
       onUploadFile () {
         document.getElementById('file-uploader').click()
