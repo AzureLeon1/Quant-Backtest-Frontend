@@ -47,7 +47,7 @@ export default {
                         console.log(response);
                         if (res=="success") {
                             sessionStorage.setItem('user', this.form.userName)
-                            this.$router.push({name: 'Code'})
+                            this.$router.push({name: 'MyStrategy'})
                         }
                         else {
                             this.$message.error("密码或用户名错误，请重试")

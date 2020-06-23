@@ -1,7 +1,7 @@
 <template>
   <div  style="margin: 50px 15px 15px 15px; text-align:left">
       <Card>
-        <p slot="title">Console </p>
+        <p slot="title">控制台</p>
         <a href="#" slot="extra" @click="run">
             <Icon type="ios-arrow-dropright-circle"></Icon>
             编译运行
@@ -20,6 +20,7 @@
 </template>
 
 <script>
+import {getNowTime} from "../utils/utils"
 export default {
   name: 'Console',
    props: {
@@ -92,6 +93,20 @@ export default {
      run() {
          console.log('run!');
          console.log(this.value);
+         var params = {
+             // TODO: strategy_id
+                        //"strategy_id": this.strategy_id,
+                        "code": this.value,
+                        "time": getNowTime()
+                    }
+                    this.$axios.post('./api/backtest', params).then((response) => {
+                        var res = response.data
+                        console.log(response);
+                        
+                        
+                    }).catch((error) => {
+                        this.$message.error("回测失败，请稍后重试")
+                    })
      }
     }
 }

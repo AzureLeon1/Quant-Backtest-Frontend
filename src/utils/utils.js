@@ -1,25 +1,34 @@
-// import Vue from 'vue'
-// import storage from '@/utils/storage'
-// import { STORAGE_KEY } from '@/utils/constants'
-// import myAPI from '@/api'
+// 获取当前时间，格式为 YY.MM.DD HH:MM
+export function getNowTime() {
+    var now = new Date()
+    var year = now.getFullYear(); //年
+    var month = now.getMonth() + 1; //月
+    var day = now.getDate(); //日
+  
+    var hh = now.getHours(); //时
+    var mm = now.getMinutes(); //分
+    var ss = now.getSeconds(); 
+  
+    var clock = year + "-";
+  
+    if (month < 10)
+      clock += "0";
+  
+    clock += month + "-";
+  
+    if (day < 10)
+      clock += "0";
+  
+    clock += day + " ";
+  
+    if (hh < 10)
+      clock += "0";
+  
+    clock += hh + ":";
+    if (mm < 10) clock += '0';
+    clock += mm;
 
-
-// function getLanguages () {
-//   return new Promise((resolve, reject) => {
-//     let languages = storage.get(STORAGE_KEY.languages)
-//     if (languages) {
-//       resolve(languages)
-//     }
-//     myAPI.getLanguages().then(res => {
-//       let languages = res.data.data.languages
-//       storage.set(STORAGE_KEY.languages, languages)
-//       resolve(languages)
-//     }, err => {
-//       reject(err)
-//     })
-//   })
-// }
-
-// export default {
-//   getLanguages: getLanguages
-// }
+    if (ss < 10) clock += '0';
+    clock += ss;
+    return clock;
+  }

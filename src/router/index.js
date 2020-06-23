@@ -4,6 +4,7 @@ import HelloWorld from '@/components/HelloWorld'
 import Code from '@/views/Code'
 import Login from '@/views/Login'
 import Register from '@/views/Register'
+import MyStrategy from '@/views/MyStrategy'
 
 
 Vue.use(Router)
@@ -24,6 +25,11 @@ export default new Router({
       path: '/code',
       name: 'Code',
       component: Code
+    },
+    {
+      path: '/my_strategy',
+      name: 'MyStrategy',
+      component: MyStrategy
     },
     {
       path: '/register',
