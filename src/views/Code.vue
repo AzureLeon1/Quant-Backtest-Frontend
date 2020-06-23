@@ -6,7 +6,7 @@
       <CodeMirror :value.sync="code" @resetCode="onResetToTemplate"></CodeMirror> 
       </Col>
       <Col span="12">
-        <Console :value.sync="code" />
+        <Console :value.sync="code" :strategy_id.sync="strategy_id" />
       </Col>
     </Row>
 

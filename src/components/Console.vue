@@ -27,7 +27,14 @@ export default {
       value: {
         type: String,
         defalut: ''
+      },
+      strategy_id: {
+          default: null
       }
+   },
+   mounted() {
+       console.log(this.strategy_id);
+       // TODO: 请求回测数据
    },
   data () {
     return {
@@ -64,7 +71,7 @@ export default {
       ],
         data1: [
             {
-                strategy_id: '13579',
+                backtest_id: '13579',
                 time: '2020-06-23 07:55:43',
                 sy: '-7.45%',
                 nsy: '-1.014%',
@@ -73,7 +80,7 @@ export default {
                 sx: '-96.22%'
             },
             {
-                strategy_id: '02468',
+                backtest_id: '02468',
                 time: '2020-06-23 07:55:43',
                 sy: '-7.45%',
                 nsy: '-1.014%',
@@ -94,19 +101,20 @@ export default {
          console.log('run!');
          console.log(this.value);
          var params = {
-             // TODO: strategy_id
-                        //"strategy_id": this.strategy_id,
-                        "code": this.value,
-                        "time": getNowTime()
-                    }
-                    this.$axios.post('./api/backtest', params).then((response) => {
-                        var res = response.data
-                        console.log(response);
-                        
-                        
-                    }).catch((error) => {
-                        this.$message.error("回测失败，请稍后重试")
-                    })
+            "user_id": sessionStorage.getItem('user'),
+            "strategy_id": this.strategy_id,
+            "code": this.value,
+            "time": getNowTime(),
+            "data_id": 1   // TODO: fix
+        }
+        this.$axios.post('./api/backtest', params).then((response) => {
+            var res = response.data
+            console.log(response);
+            
+            
+        }).catch((error) => {
+            this.$message.error("回测失败，请稍后重试")
+        })
      }
     }
 }
