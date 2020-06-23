@@ -1,5 +1,5 @@
 <template>
-  <div  style="margin: 50px 15px 15px 15px; text-align:left">
+  <div  style="margin:0px 15px 15px 15px; text-align:left">
       <Card>
         <p slot="title">控制台</p>
         <a href="#" slot="extra" @click="run">

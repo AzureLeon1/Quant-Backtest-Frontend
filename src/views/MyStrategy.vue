@@ -88,7 +88,8 @@ export default {
       toStrategy(row) {
           var params = {
               type: 'old',
-              strategy_id: row.strategy_id
+              strategy_id: row.strategy_id,
+              strategy_name: row.name
           }
           this.$router.push({name: 'Code', params: params})
       }
