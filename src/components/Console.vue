@@ -145,6 +145,17 @@ export default {
      },
      deleteThis(row) {
          console.log(row.backtest_id);
+         this.$axios.delete('./api/backtest/'+row.backtest_id).then((response) => {
+            var res = response.data
+            console.log(res);
+            if (res.code == 200) {
+                this.$message.success("删除成功")
+                this.data1.splice(this.data1.findIndex(item => item.backtest_id === row.backtest_id), 1)
+            }
+
+        }).catch((error) => {
+            this.$message.error("删除失败，请稍后重试")
+        })
      },
      run() {
          /* console.log('run!');
