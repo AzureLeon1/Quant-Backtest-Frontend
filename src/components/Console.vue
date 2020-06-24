@@ -47,6 +47,8 @@ export default {
         websocket: null,
         result: {},
         temp_time: "",
+        new_backtest: {},
+        progress: null,
         columns1: [
           {
               title: '回测时间',
@@ -69,10 +71,10 @@ export default {
               title: '夏普比率',
               key: 'xp',
           },
-          {
+/*           {
               title: '手续费率',
               key: 'sx'
-          },
+          }, */
           {
               title: '详细报告',
               slot: 'report'
@@ -122,12 +124,34 @@ export default {
         }).catch((error) => {
             this.$message.error("回测失败，请稍后重试")
         }) */
-        this.initWebSocket();
+
+
+        // 先把code用http请求发送过去，然后再用websocket进行回测
+         console.log('run!');
+         console.log(this.value);
+         this.temp_time = getNowTime()
+         var params = {
+            "user_id": sessionStorage.getItem('user'),
+            "strategy_id": this.strategy_id,
+            "code": this.value,
+            "time": this.temp_time,
+            "data_id": 1   // TODO: fix
+        }
+        this.$axios.post('./api/backtest', params).then((response) => {
+            var res = response.data
+            console.log(res);
+            this.new_backtest = {};
+            this.initWebSocket();
+        }).catch((error) => {
+            this.$message.error("回测失败，请稍后重试")
+        }) 
+        
      },
      initWebSocket(){ //初始化weosocket
         //const wsuri = "ws://localhost/api/wsbacktest?nickName=" + "leon";
-        this.temp_time = getNowTime()
-        const wsuri = "ws://localhost:44370/api/wsbacktest?code=" + this.value + "&strategy_id=" + this.strategy_id + "&time=" + this.temp_time;
+        //this.temp_time = getNowTime()
+        var user_id = sessionStorage.getItem("user");
+        const wsuri = "ws://localhost:44370/api/wsbacktest?&strategy_id=" + this.strategy_id + "&time=" + this.temp_time + "&user_id=" + user_id;
         this.websock = new WebSocket(wsuri);
         this.websock.onmessage = this.websocketonmessage;
         this.websock.onopen = this.websocketonopen;
@@ -145,10 +169,10 @@ export default {
       },
       websocketonmessage(e){ //数据接收
       console.log(e.data);
-      console.log(JSON.parse(e.data));
-        this.result = JSON.parse(e.data);
-        this.result.time = this.temp_time
-        this.data1.push(this.result)
+      //console.log(JSON.parse(e.data));
+        //this.result = JSON.parse(e.data);
+        //this.result.time = this.temp_time
+        //this.data1.push(this.result)
         console.log("message");
       },
       websocketsend(Data){//数据发送
