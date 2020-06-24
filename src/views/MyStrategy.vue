@@ -48,7 +48,8 @@ export default {
                 key: 'times'
             }
         ],
-        table_data: [
+        table_data: [],
+        /* table_data: [
             {
                 strategy_id: 1,
                 name: '小市值策略',
@@ -77,7 +78,7 @@ export default {
                 last_modify_time: '2020-06-03 13:55:11',
                 times: 5
             },
-        ]
+        ] */
 
     }
   },

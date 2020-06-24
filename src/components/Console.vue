@@ -4,13 +4,14 @@
         <p slot="title">控制台</p>
         <a href="#" slot="extra" @click="run">
             <Icon type="ios-arrow-dropright-circle"></Icon>
-            编译运行
+            运行回测
         </a>
         
         <p>
             <Table :columns="columns1" :data="data1">
-                <template slot-scope="{ row }" slot="report">
-                    <Button type="primary" size="small" @click="download(row)">下载</Button>
+                <template slot-scope="{ row }" slot="operation">
+                    <Button type="primary" size="small" @click="download(row)">详细报告</Button>
+                    <Button type="error" size="small" @click="deleteThis(row)">删除</Button>
                 </template>
             </Table>
          </p>
@@ -27,19 +28,25 @@ import {getNowTime} from "../utils/utils"
 export default {
   name: 'Console',
    props: {
+       props_strategy_id: Number,
       value: {
         type: String,
         defalut: ''
-      },
-      strategy_id: {
-          default: null
       }
+   },
+   watch: {
+       props_strategy_id(val) {
+           this.strategy_id = val;
+           console.log('props_update: ', val);
+           this.getHistoryData();    // 父组件的strategy_id没传进来之前先不要发送请求
+       }
    },
    created() {
       // this.initWebSocket();
    },
    mounted() {
        console.log(this.strategy_id);
+       
        // TODO: 请求回测数据
    },
    destroyed() {
@@ -47,6 +54,7 @@ export default {
     },
   data () {
     return {
+        strategy_id: 0,
         websocket: null,
         result: {},
         temp_time: "",
@@ -62,30 +70,36 @@ export default {
           },
           {
               title: '收益策略',
-              key: 'sy'
+              key: 'sy',
+              width: 85
           },
           {
               title: '年化收益',
-              key: 'nsy'
+              key: 'nsy',
+              width: 85
           },
           {
               title: '最大回撤',
-              key: 'hc'
+              key: 'hc',
+              width: 85
           },
           {
               title: '夏普比率',
               key: 'xp',
+              width: 85
           },
 /*           {
               title: '手续费率',
               key: 'sx'
           }, */
           {
-              title: '详细报告',
-              slot: 'report'
+              title: '操作',
+              slot: 'operation',
+              
           }
       ],
-        data1: [
+      data1: [],
+        /* data1: [
             {
                 backtest_id: '13579',
                 time: '2020-06-23 07:55:43',
@@ -105,13 +119,32 @@ export default {
                 sx: '-96.22%'
             },
             
-        ]
+        ] */
     }
     
   },
   methods: {
+      getHistoryData() {
+          
+          //while(this.strategy_id == 0) {}    // 父组件的strategy_id没传进来之前先不要发送请求
+          console.log(this.strategy_id);
+          var params = {
+            "user_id": sessionStorage.getItem('user'),
+            "strategy_id": this.strategy_id,
+          }
+         this.$axios.post('./api/history', params).then((response) => {
+            var res = response.data.data
+            this.data1 = res.history_result
+            console.log(res);
+        }).catch((error) => {
+            this.$message.error("回测失败，请稍后重试")
+        })
+      },
      download(row) {
-         console.log(row.strategy_id);
+         console.log(row.backtest_id);
+     },
+     deleteThis(row) {
+         console.log(row.backtest_id);
      },
      run() {
          /* console.log('run!');
@@ -211,16 +244,16 @@ export default {
         // 下载链接
 
         if (this.indicator_receive_cnt==4) {
+            this.indicator_receive_cnt = 0
             this.new_backtest.time = this.temp_time
-            this.backtest_id = 2
             this.data1.push(this.new_backtest)
             console.log();
-
+            
         }
 
         if (message.slice(0, 11) == 'backtest_id') {
-            this.data1[ this.data1.length-1 ].backtest_id = message.slice(13);
-            console.log(this.data1[ this.data1.length-1 ]);
+            this.data1[this.data1.length-1].backtest_id = message.slice(13);
+            console.log(this.data1[this.data1.lenght-1]);
         }
 
         
