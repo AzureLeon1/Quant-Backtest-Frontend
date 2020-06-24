@@ -14,6 +14,9 @@
             </a>
             
         </template>
+        <template slot-scope="{ row }" slot="operation">
+                    <Button type="error" size="small" @click="deleteThis(row)">删除</Button>
+                </template>
     </Table>
   </div>
 </template>
@@ -46,7 +49,12 @@ export default {
             {
                 title: '历史回测次数',
                 key: 'times'
+            },
+            {
+              title: '操作',
+              slot: 'operation',
             }
+          
         ],
         table_data: [],
         /* table_data: [
@@ -109,7 +117,31 @@ export default {
               strategy_name: row.name
           }
           this.$router.push({name: 'Code', params: params})
-      }
+      },
+      deleteThis(row) {
+         console.log(row.strategy_id);
+         this.$Modal.confirm({
+            title: "确认删除",
+            content: "即将删除该策略及其全部相关回测记录",
+            onOk: () => {
+                this.$axios.delete('./api/strategy/'+row.strategy_id).then((response) => {
+                    var res = response.data
+                    console.log(res);
+                    if (res.code == 200) {
+                        this.$message.success("删除成功")
+                        this.table_data.splice(this.table_data.findIndex(item => item.strategy_id === row.strategy_id), 1)
+                    }
+
+                }).catch((error) => {
+                    this.$message.error("删除失败，请稍后重试")
+                })
+            },
+            onCancel: () => {
+                this.$Message.info('取消')
+            }
+        });
+         
+     },
 
   },
   computed: {
