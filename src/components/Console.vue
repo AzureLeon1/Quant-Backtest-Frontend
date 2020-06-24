@@ -206,16 +206,21 @@ export default {
             
         }
 
-        console.log(this.new_backtest);
+        
 
         // 下载链接
 
         if (this.indicator_receive_cnt==4) {
             this.new_backtest.time = this.temp_time
-            this.backtest_id = 1
+            this.backtest_id = 2
             this.data1.push(this.new_backtest)
-            console.log(this.data1[ this.data1.length-1 ]);
+            console.log();
 
+        }
+
+        if (message.slice(0, 11) == 'backtest_id') {
+            this.data1[ this.data1.length-1 ].backtest_id = message.slice(13);
+            console.log(this.data1[ this.data1.length-1 ]);
         }
 
         
