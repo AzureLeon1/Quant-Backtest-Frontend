@@ -14,6 +14,9 @@
                 </template>
             </Table>
          </p>
+
+        <Progress v-show="show_progress"  :percent="progress" :stroke-width="20" status="active" text-inside />
+
       </Card>
     
   </div>
@@ -48,7 +51,9 @@ export default {
         result: {},
         temp_time: "",
         new_backtest: {},
-        progress: null,
+        progress: 45.23,
+        show_progress: false,
+        indicator_receive_cnt: 0,
         columns1: [
           {
               title: '回测时间',
@@ -141,6 +146,9 @@ export default {
             var res = response.data
             console.log(res);
             this.new_backtest = {};
+            this.progress = 0;
+            this.show_progress = true;
+            this.indicator_receive_cnt = 0;
             this.initWebSocket();
         }).catch((error) => {
             this.$message.error("回测失败，请稍后重试")
@@ -169,10 +177,55 @@ export default {
       },
       websocketonmessage(e){ //数据接收
       console.log(e.data);
+        var message = e.data;
+        // etc. progress: 0.8996
+        if (message.slice(0, 8) == 'progress') {    // 进度
+            this.progress = parseFloat((parseFloat(message.slice(10))*100).toFixed(2))
+            if (this.progress == 100.00) {
+                this.show_progress = false
+            }
+        }
+        else if (message.slice(0, 4) == '策略收益') {
+            this.indicator_receive_cnt++
+            this.new_backtest.sy = message.slice(6)
+
+        }
+        else if (message.slice(0, 5) == '最大回撤率') {
+            this.indicator_receive_cnt++
+            this.new_backtest.hc = message.slice(7)
+            
+        }
+        else if (message.slice(0, 4) == '年化收益') {
+            this.indicator_receive_cnt++
+            this.new_backtest.nsy = message.slice(6)
+            
+        }
+        else if (message.slice(0, 4) == '夏普比率') {
+            this.indicator_receive_cnt++
+            this.new_backtest.xp = message.slice(6)
+            
+        }
+
+        console.log(this.new_backtest);
+
+        // 下载链接
+
+        if (this.indicator_receive_cnt==4) {
+            this.new_backtest.time = this.temp_time
+            this.backtest_id = 1
+            this.data1.push(this.new_backtest)
+            console.log(this.data1[ this.data1.length-1 ]);
+
+        }
+
+        
+
       //console.log(JSON.parse(e.data));
         //this.result = JSON.parse(e.data);
         //this.result.time = this.temp_time
         //this.data1.push(this.result)
+        
+        
         console.log("message");
       },
       websocketsend(Data){//数据发送
