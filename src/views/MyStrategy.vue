@@ -24,6 +24,9 @@ export default {
   components: {
 
   },
+  mounted() {
+      this.getData();
+  },
   data() {
     return {
         columns: [
@@ -38,7 +41,7 @@ export default {
             },
             {
                 title: '最后修改时间',
-                key: 'modify_time'
+                key: 'last_modify_time'
             },
             {
                 title: '历史回测次数',
@@ -50,28 +53,28 @@ export default {
                 strategy_id: 1,
                 name: '小市值策略',
                 create_time: '2020-06-02 16:35:22',
-                modify_time: '2020-06-03 13:55:11',
+                last_modify_time: '2020-06-03 13:55:11',
                 times: 3
             },
             {
                 strategy_id: 2,
                 name: '双均线策略',
                 create_time: '2020-06-02 16:35:22',
-                modify_time: '2020-06-03 13:55:11',
+                last_modify_time: '2020-06-03 13:55:11',
                 times: 2
             },
             {
                 strategy_id: 3,
                 name: '银行股轮动策略',
                 create_time: '2020-06-02 16:35:22',
-                modify_time: '2020-06-03 13:55:11',
+                last_modify_time: '2020-06-03 13:55:11',
                 times: 1
             },
             {
                 strategy_id: 4,
                 name: '低价估值选股策略',
                 create_time: '2020-06-02 16:35:22',
-                modify_time: '2020-06-03 13:55:11',
+                last_modify_time: '2020-06-03 13:55:11',
                 times: 5
             },
         ]
@@ -79,6 +82,19 @@ export default {
     }
   },
   methods: {
+      getData() {
+          var params = {
+                "user_id": sessionStorage.getItem('user'),
+            }
+            this.$axios.post('./api/all_strategy', params).then((response) => {
+                        var res = response.data.data
+                        console.log(res);
+                        this.table_data = res.strategys
+                        console.log(this.table_data);
+                    }).catch((error) => {
+                        this.$notify.error({title: '失败', message: '出现未知错误，请重试'})
+                    })
+      },
       createStrategy() {
           var params = {
               type: 'new',

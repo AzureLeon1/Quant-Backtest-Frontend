@@ -85,7 +85,6 @@ export default {
           this.strategy_id = res.data.strategy_id
           console.log(this.strategy_id);
           this.$Message.info('Clicked ok');
-          this.strategy_id = this.formItem.strategy_name
       }).catch((error) => {
           this.$notify.error({title: '失败', message: '出现未知错误，请重试'})
       })
