@@ -185,6 +185,20 @@ export default {
         })
 
      },
+     deleteThis(row) {
+         console.log(row.data_id);
+         this.$axios.delete('./api/data/'+row.data_id).then((response) => {
+            var res = response.data
+            console.log(res);
+            if (res.code == 200) {
+                this.$message.success("删除成功")
+                this.table_data.splice(this.table_data.findIndex(item => item.data_id === row.data_id), 1)
+            }
+
+        }).catch((error) => {
+            this.$message.error("删除失败，请稍后重试")
+        })
+     },
     
   }
 }
