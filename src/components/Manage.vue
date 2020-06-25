@@ -1,7 +1,7 @@
 <template>
   <el-menu
     :default-active="current"
-    background-color="#545c64"
+    background-color="#23315b"
     text-color="#fff"
     active-text-color="#ffd04b"
     mode="horizontal"
@@ -18,9 +18,21 @@
       <i class="el-icon-files"></i>
       <span slot="title">管理生成的文档</span>
     </el-menu-item> -->
-    <el-menu-item index="register" route="/register">
+    <el-menu-item index="my_strategy" route="/my_strategy">
+      <i class="el-icon-files"></i>
+      <span slot="title">策略管理</span>
+    </el-menu-item> 
+    <el-menu-item index="code" route="/code">
+      <i class="el-icon-files"></i>
+      <span slot="title">策略回测</span>
+    </el-menu-item> 
+     <el-menu-item index="data" route="/data">
+      <i class="el-icon-files"></i>
+      <span slot="title">数据管理</span>
+    </el-menu-item> 
+    <el-menu-item style="float:right" index="register" route="/register">
       <i class="el-icon-user-solid"></i>
-      <span slot="title">注册新用户</span>
+      <span slot="title">注册</span>
     </el-menu-item>
 <!--     <el-menu-item index="operation" route="/operation">
       <i class="el-icon-s-management"></i>

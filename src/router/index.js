@@ -5,6 +5,7 @@ import Code from '@/views/Code'
 import Login from '@/views/Login'
 import Register from '@/views/Register'
 import MyStrategy from '@/views/MyStrategy'
+import Data from '@/views/Data'
 
 
 Vue.use(Router)
@@ -30,6 +31,11 @@ export default new Router({
       path: '/my_strategy',
       name: 'MyStrategy',
       component: MyStrategy
+    },
+    {
+      path: '/data',
+      name: 'Data',
+      component: Data
     },
     {
       path: '/register',

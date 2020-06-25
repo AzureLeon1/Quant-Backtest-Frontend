@@ -87,6 +87,7 @@ export default {
       })
     },
     ok () {
+      this.strategy_name = this.formItem.strategy_name;
         var params = {
         user_id: sessionStorage.getItem('user'),
         strategy_name: this.formItem.strategy_name,
@@ -118,7 +119,7 @@ export default {
     text-align: left;
     font-size: 24px;
     font-weight: 400;
-    margin: 20px 20px;
+    margin: 20px 18px;
 }
 
 </style>

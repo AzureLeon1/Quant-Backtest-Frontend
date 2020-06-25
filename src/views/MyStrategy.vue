@@ -161,8 +161,9 @@ export default {
 
 #title {
     text-align: left;
-    font-size: 18px;
+    font-size: 24px;
     font-weight: 400;
+    margin: 20px 18px;
 }
 
 </style>
