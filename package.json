@@ -13,6 +13,7 @@
     "codemirror": "^5.54.0",
     "element-ui": "^2.13.2",
     "iview": "^3.5.4",
+    "js-file-download": "^0.4.12",
     "less-loader": "^4.1.0",
     "view-design": "^4.2.0",
     "vue": "^2.5.2",

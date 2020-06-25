@@ -10,7 +10,7 @@
         <p>
             <Table :columns="columns1" :data="data1">
                 <template slot-scope="{ row }" slot="operation">
-                    <Button type="primary" size="small" @click="download(row)">详细报告</Button>
+                    <Button :disabled="row.backtest_id==null" type="primary" size="small" @click="download(row)">详细报告</Button>
                     <Button type="error" size="small" @click="deleteThis(row)">删除</Button>
                 </template>
             </Table>
@@ -54,6 +54,7 @@ export default {
     },
   data () {
     return {
+        test: true,
         strategy_id: 0,
         websocket: null,
         result: {},
@@ -140,8 +141,28 @@ export default {
             this.$message.error("回测失败，请稍后重试")
         })
       },
+      getNumberTime(raw_time) {
+          return raw_time.slice(0, 4) + raw_time.slice(5,7) + raw_time.slice(8,10) + raw_time.slice(11, 13) + raw_time.slice(14,16) + raw_time.slice(17,19)
+      },
      download(row) {
+         var fileDownload = require('js-file-download')
          console.log(row.backtest_id);
+         var params = {
+            "backtest_id": row.backtest_id,
+          }
+        this.$axios.post('./api/report/download', params, {responseType: 'arraybuffer'}).then((response) => {
+        //this.$axios.get('./api/report/download', {responseType: 'arraybuffer'}).then((response) => {
+            console.log(response);
+            //var fileName = row.backtest_id + ".docx"
+            var fileName = "回测报告" + this.getNumberTime(row.time) + ".docx"
+            console.log(fileName);
+            fileDownload(response.data, fileName)
+            this.$notify({title: '提示', message: '下载成功', type: 'success'})
+            //this.disable = false
+        }).catch((error) => {
+            this.$message.error("下载失败，请稍后重试")
+        })
+
      },
      deleteThis(row) {
          console.log(row.backtest_id);
@@ -249,23 +270,20 @@ export default {
             this.new_backtest.xp = message.slice(6)
             
         }
+        else if (message.slice(0, 11) == 'backtest_id') {
+            this.indicator_receive_cnt++
+            this.new_backtest.backtest_id = message.slice(13);
+        }
 
-        
-
-        // 下载链接
-
-        if (this.indicator_receive_cnt==4) {
+        if (this.indicator_receive_cnt==5) {
             this.indicator_receive_cnt = 0
             this.new_backtest.time = this.temp_time
             this.data1.push(this.new_backtest)
-            console.log();
+            console.log(this.data1);
             
         }
 
-        if (message.slice(0, 11) == 'backtest_id') {
-            this.data1[this.data1.length-1].backtest_id = message.slice(13);
-            console.log(this.data1[this.data1.lenght-1]);
-        }
+
 
         
 
