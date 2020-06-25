@@ -39,7 +39,9 @@ export default {
     if (this.$route.params.type == 'old') {
       this.strategy_id = this.$route.params.strategy_id
       this.strategy_name = this.$route.params.strategy_name
-      console.log(this.strategy_id);
+      console.log('strategy_id in code view: ', this.strategy_id);
+      // get old code
+      this.getCode();
     }
     else {
       // 创建新策略
@@ -59,6 +61,19 @@ export default {
     }
   },
   methods: {
+    getCode() {
+      var params = {
+        strategy_id: this.strategy_id,
+      }
+      this.$axios.post('./api/code', params).then((response) => {
+          var res = response.data
+          // TODO: save strategy_id
+          console.log(res);
+          this.code = res.data.code
+      }).catch((error) => {
+          this.$notify.error({title: '失败', message: '获取策略代码失败，请重试'})
+      })
+    },
     updateValue(value) {
       console.log(value);
       this.code = value
