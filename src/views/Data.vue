@@ -14,18 +14,30 @@
             </a>   
         </template>
         <template slot-scope="{ row }" slot="operation">
+            <Button :disabled="row.data_id==null" type="primary" size="small" @click="download(row)">下载</Button>
             <Button :disabled="row.data_type=='公开数据'" type="error" size="small" @click="deleteThis(row)">删除</Button>
         </template>
     </Table>
 
     <Modal
         v-model="show_modal"
-        title="请输入策略名称"
+        title="请输入数据信息"
         @on-ok="ok"
         @on-cancel="cancel">
-        <Form :model="formItem" :label-width="80">
-        <FormItem label="策略名称">
-            <Input v-model="formItem.data_name" placeholder="请输入数据名称"></Input>
+        <Form :model="uploadParam" :label-width="80">
+        <FormItem label="数据名称">
+            <Input v-model="uploadParam.data_name" placeholder="请输入数据名称"></Input>
+        </FormItem>
+        <FormItem label="起始时间">
+            <DatePicker format="yyyy-MM" @on-change="uploadParam.start_time=$event" v-model="uploadParam.start_time" type="month" placeholder="选择年月" style="width: 200px"></DatePicker>
+        </FormItem>
+        <FormItem label="结束时间">
+            <DatePicker format="yyyy-MM" @on-change="uploadParam.end_time=$event" v-model="uploadParam.end_time" type="month" placeholder="选择年月" style="width: 200px"></DatePicker>
+        </FormItem>
+        <FormItem label="选择文件">
+            <Upload :on-success="succ" :data="uploadParam" :disabled="uploadParam.data_name=='' || uploadParam.start_time =='' || uploadParam.end_time==''" action="//localhost:44370/api/data/upload">
+                <Button icon="ios-cloud-upload-outline">选择CSV文件</Button>
+            </Upload>
         </FormItem>
         </Form>
     </Modal>
@@ -42,8 +54,14 @@ export default {
   mounted() {
     this.getData()
   },
+  watch: {
+/*     uploadData() {
+        return 
+    }, */
+  },
   data() {
     return {
+        
         show_modal: false,
         columns: [
             
@@ -71,6 +89,10 @@ export default {
         ],
         table_data: [],
         formItem: {
+            
+        },
+        uploadParam: {
+            user_id:sessionStorage.getItem("user"),
             data_name: '',
             start_time: '',
             end_time: ''
@@ -124,6 +146,24 @@ export default {
     },
     cancel () {
         this.$Message.info('取消上传');
+    },
+    succ(res) {
+        console.log(res);
+
+        var new_data = {
+            data_name: this.uploadParam.data_name,
+            data_type: '私有数据',
+            start_time: this.uploadParam.start_time,
+            end_time: this.uploadParam.end_time,
+            data_id: res
+        }
+        this.table_data.push()
+
+        this.show_modal = false
+        this.uploadParam.data_name=''
+        this.uploadParam.start_time=''
+        this.uploadParam.end_time=''
+
     }
     
   }
