@@ -157,14 +157,34 @@ export default {
             end_time: this.uploadParam.end_time,
             data_id: res
         }
-        this.table_data.push()
+        this.table_data.push(new_data)
 
         this.show_modal = false
         this.uploadParam.data_name=''
         this.uploadParam.start_time=''
         this.uploadParam.end_time=''
 
-    }
+    },
+    download(row) {
+         var fileDownload = require('js-file-download')
+         console.log(row.data_id);
+         var params = {
+            "data_id": row.data_id,
+          }
+        this.$axios.post('./api/data/download', params, {responseType: 'arraybuffer'}).then((response) => {
+        //this.$axios.get('./api/report/download', {responseType: 'arraybuffer'}).then((response) => {
+            console.log(response);
+            //var fileName = row.backtest_id + ".docx"
+            var fileName = row.data_name + ".csv"
+            console.log(fileName);
+            fileDownload(response.data, fileName)
+            this.$notify({title: '提示', message: '下载成功', type: 'success'})
+            //this.disable = false
+        }).catch((error) => {
+            this.$message.error("下载失败，请稍后重试")
+        })
+
+     },
     
   }
 }
