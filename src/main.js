@@ -15,7 +15,10 @@ import 'element-ui/lib/theme-chalk/index.css';
 
 import axios from 'axios';
 Vue.prototype.$axios = axios;
+// dev
 axios.defaults.baseURL = 'http://localhost:44370';
+// delployt
+//axios.defaults.baseURL = 'http://localhost:44470';
 
 Vue.config.productionTip = false
 
